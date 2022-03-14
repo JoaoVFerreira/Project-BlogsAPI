@@ -24,4 +24,15 @@ async function createUser(req, res, next) {
   }
 }
 
-module.exports = { createUser };
+async function getUsers(_req, res, next) {
+  try {
+    const allUsers = await user.findAll();
+
+    return res.status(200).json(allUsers);
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+}
+
+module.exports = { createUser, getUsers };
