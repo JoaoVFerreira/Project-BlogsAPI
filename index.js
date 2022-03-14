@@ -14,9 +14,9 @@ app.get('/', (request, response) => {
 
 app.use(bodyParser.json());
 
-app.use('/user', userRouter);
-
 app.use('/login', loginRouter);
+
+app.use('/user', userRouter);
 
 app.use(errorHandler);
 
