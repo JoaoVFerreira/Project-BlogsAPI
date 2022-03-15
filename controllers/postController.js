@@ -54,8 +54,29 @@ async function getOnePost(req, res, next) {
   }
 }
 
+async function updatePost(req, res, next) {
+  try {
+    const updateContent = { title: req.body.title, content: req.body.content };
+    await BlogPost.update(
+      updateContent, { where: { userId: req.params.id } },
+    );
+
+    const getPostModified = await BlogPost.findOne({
+      where: { id: req.params.id },
+      attributes: ['title', 'content', 'userId'],
+      include: { model: Category, as: 'categories', through: { attributes: [] } },
+    });
+
+    return res.status(200).json(getPostModified);
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+}
+
 module.exports = {
   createPost,
   getAllPosts,
   getOnePost,
+  updatePost,
 };
