@@ -8,8 +8,9 @@ const validateCategories = require('../middlewares/categoriesIdsValidations');
 
 const { blogPostValidation } = require('../middlewares/blogPostValidation');
 
-const { createPost } = require('../controllers/postController');
+const { createPost, getAllPosts } = require('../controllers/postController');
 
 router.post('/', jwtValidation, blogPostValidation, validateCategories, createPost);
+router.get('/', jwtValidation, getAllPosts);
 
 module.exports = router;
