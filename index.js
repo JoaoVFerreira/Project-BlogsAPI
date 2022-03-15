@@ -7,6 +7,7 @@ const app = express();
 const userRouter = require('./routes/userRouter');
 const loginRouter = require('./routes/loginRouter');
 const categoriesRouter = require('./routes/categoriesRouter');
+const postRouter = require('./routes/postRouter');
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (request, response) => {
@@ -20,6 +21,8 @@ app.use('/login', loginRouter);
 app.use('/user', userRouter);
 
 app.use('/categories', categoriesRouter);
+
+app.use('/post', postRouter);
 
 app.use(errorHandler);
 
