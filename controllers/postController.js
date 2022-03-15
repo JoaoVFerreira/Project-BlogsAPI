@@ -35,7 +35,27 @@ async function getAllPosts(_req, res, next) {
   }
 }
 
+async function getOnePost(req, res, next) {
+  try {
+    const { id } = req.params;
+    const post = await BlogPost.findOne({
+      where: { id },
+      attributes: ['id', 'title', 'content', 'userId', 'published', 'updated'],
+      include: [{ model: User, as: 'user' },
+      { model: Category, as: 'categories', through: { attributes: [] } }],
+    });
+
+    if (!post) return res.status(404).json({ message: 'Post does not exist' });
+
+    return res.status(200).json(post);
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+}
+
 module.exports = {
   createPost,
   getAllPosts,
+  getOnePost,
 };
