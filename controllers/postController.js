@@ -1,3 +1,7 @@
+const { Op } = require('sequelize');
+
+const blogPostsQuery = require('../services/blogPostQuery');
+
 const { BlogPost, PostsCategory, User, Category } = require('../models');
 
 async function createPost(req, res, next) {
@@ -95,10 +99,35 @@ async function removePost(req, res, next) {
   }
 }
 
+async function filterPost(req, res, next) {
+  try {
+    if (!req.query.q) {
+      const posts = await blogPostsQuery();
+      return res.status(200).json(posts);
+    }
+
+    const filteredPost = await BlogPost.findAll({
+      where: { [Op.or]: [{ title: { [Op.like]: req.query.q } },
+        { content: { [Op.like]: req.query.q } }],
+      },
+      attributes: ['id', 'title', 'content', 'userId', 'published', 'updated'],
+      include: [{ model: User, as: 'user', attributes: { exclude: ['password'] } },
+      { model: Category, as: 'categories', through: { attributes: [] } }],
+    });
+
+    if (!filteredPost) return res.status(200).json([]);
+
+    return res.status(200).json(filteredPost);
+  } catch (err) {
+    next(err);
+  }
+}
+
 module.exports = {
   createPost,
   getAllPosts,
   getOnePost,
   updatePost,
   removePost,
+  filterPost,
 };
