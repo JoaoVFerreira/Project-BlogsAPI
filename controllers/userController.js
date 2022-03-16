@@ -49,4 +49,17 @@ async function getUserById(req, res, next) {
   }
 }
 
-module.exports = { createUser, getUsers, getUserById };
+async function removeUser(req, res, next) {
+  try {
+    await user.destroy({
+      where: { id: req.user.id },
+    });
+
+    return res.status(204).end();
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+}
+
+module.exports = { createUser, getUsers, getUserById, removeUser };
