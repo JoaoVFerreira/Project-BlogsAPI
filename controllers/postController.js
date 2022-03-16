@@ -74,9 +74,31 @@ async function updatePost(req, res, next) {
   }
 }
 
+async function removePost(req, res, next) {
+  try {
+    const post = await BlogPost.findOne({ where: { id: req.params.id } });
+
+    if (!post) return res.status(404).json({ message: 'Post does not exist' });
+
+    if (+post.userId !== +req.user.id) {
+      return res.status(401).json({ message: 'Unauthorized user' });
+    }
+
+    await BlogPost.destroy({
+      where: { id: req.params.id },
+    });
+
+    return res.status(204).end();
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+}
+
 module.exports = {
   createPost,
   getAllPosts,
   getOnePost,
   updatePost,
+  removePost,
 };
