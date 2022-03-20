@@ -1,5 +1,5 @@
 
-# Seja bem vindo ao Project-BlogsAPI! 🚩
+# Seja bem vindo ao Project-BlogsAPI 🚩
 
 ## Descrição do Projeto
 > BACK-END
